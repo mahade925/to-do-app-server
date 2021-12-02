@@ -34,7 +34,7 @@ async function verifyToken(req, res, next) {
 
         }
     }
-    next(); 
+    next();
 }
 
 async function run() {
@@ -56,34 +56,26 @@ async function run() {
         // Get a admin
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
-            const query = {email: email};
+            const query = { email: email };
             const user = await usersCollection.findOne(query);
             let isAdmin = false;
-            if(user?.role === 'admin') {
+            if (user?.role === 'admin') {
                 isAdmin = true;
             };
-            res.json({admin: isAdmin})
+            res.json({ admin: isAdmin })
         });
 
         // Get all users
         app.get('/users', verifyToken, async (req, res) => {
-            const email = req.query.email;
-            console.log(email)
-            console.log(req.decodedUserEmail)
-            if (req.decodedUserEmail === email) {
-                const cursor = usersCollection.find({});
-                const result = await cursor.toArray();
-                res.json(result)
-            }
-            else {
-                res.status(401).json({ message: 'User not authorized' })
-            }
+            const cursor = usersCollection.find({});
+            const result = await cursor.toArray();
+            res.json(result)
         });
 
         // Delete a user
         app.delete('/users/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)};
+            const query = { _id: ObjectId(id) };
             const result = await usersCollection.deleteOne(query);
             console.log('Deleting ', result);
             res.json(result)
@@ -92,8 +84,8 @@ async function run() {
         // Update subscription status
         app.put('/users/:id', async (req, res) => {
             const id = req.params.id;
-            const filter = {_id: ObjectId(id)};
-            const option = {upsert: true};
+            const filter = { _id: ObjectId(id) };
+            const option = { upsert: true };
             const updateDoc = {
                 $set: {
                     status: 'Approved'
@@ -123,7 +115,7 @@ async function run() {
         // Delete a Note
         app.delete('/notes/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: ObjectId(id)};
+            const query = { _id: ObjectId(id) };
             const result = await notesCollection.deleteOne(query);
             console.log('Deleting ', result);
             res.json(result)
@@ -145,7 +137,7 @@ async function run() {
             console.log('updating', id)
             res.json(result)
         })
-    }finally {
+    } finally {
         // await client.close()
     }
 }
