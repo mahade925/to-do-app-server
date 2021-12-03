@@ -81,7 +81,7 @@ async function run() {
             res.json(result)
         });
 
-        // Update subscription status
+        // Update subscription status by id
         app.put('/users/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
